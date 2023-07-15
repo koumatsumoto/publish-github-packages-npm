@@ -14,13 +14,12 @@ runs:
   steps:
     - name: Configure .npmrc to deploy GitHub Packages
       shell: bash
+      # .npmrcが読まれる際は、${VAR_NAME}の形式の文字列を実行時の環境変数の値で置換してくれる
       run: |
         cat << EOF > .npmrc
         @koumatsumoto:registry=https://npm.pkg.github.com/
-        //npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN
+        //npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}
         EOF
-      env:
-        NODE_AUTH_TOKEN: ${{ inputs.auth_token }}
 
     - name: Publish package
       shell: bash
